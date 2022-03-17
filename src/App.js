@@ -41,7 +41,10 @@ function App() {
 
     return (
         <div className="App">
-            <div className="App__header"> Scwordle </div>
+            <div className="App__header">
+                Scwordle 
+                <button onClick={play}>Play Again</button>
+            </div>
             <Wordle target={targetWord} onNewGame={play} isValidWord={isValidWord} />
         </div>
     );

@@ -11,8 +11,11 @@ body {
 }
 
 .App__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
     height: 30px;
-    line-height: 30px;
     background: #b4b5ba;
     font-weight: bold;
     text-align: center;
@@ -37,20 +40,46 @@ body {
     justify-content: center;
 }
 
-.Wordle__Result {
+.Modal {
     position: absolute;
-
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
+}
 
+.Modal__overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    opacity: 0.5;
+}
+
+.Modal__content {
     width: calc(100% - 60px);
-    max-height: 90%;
     max-width: 440px;
+    max-height: 90%;
+    z-index: 1;
+    position: relative;
 
     padding: 25px;
     background: white;
     border: 2px solid #494c66;
+}
+
+.Modal__close {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    background: none;
+    border: 0;
+    font-size: 20px;
 }
 
 .Row {

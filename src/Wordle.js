@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Row from './Row.js';
 import KeyBoard from './KeyBoard.js';
+import Modal from './Modal.js';
 
 const initialState = ['', '', '', '', '', '']
 
@@ -55,15 +56,15 @@ function Wordle({ target, isValidWord, onNewGame }) {
           </div>
           <KeyBoard target={target} guesses={guesses.slice(0, i)} onChange={handleKeyDown} />
           {modalDisplay && guesses[i - 1] === target ? (
-              <div className="Wordle__Result">
+              <Modal open onClose={() => setModalDisplay(false)}>
                   You won!
                   <button onClick={onNewGame}> Play Again </button>
-              </div>
+              </Modal>
           ) : modalDisplay && i >= guesses.length && (
-              <div className="Wordle__Result">
+              <Modal open onClose={() => setModalDisplay(false)}>
                   You lost!  The wordle was {target}
                   <button onClick={onNewGame}> Play Again </button>
-              </div>
+              </Modal>
           )}
       </div>
     );
