@@ -1,38 +1,153 @@
-.App {
-  text-align: center;
+* {
+    box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+button {
+    display: block;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+body {
+    color: #3b3c45;
+}
+
+.App__header {
+    height: 30px;
+    line-height: 30px;
+    background: #b4b5ba;
+    font-weight: bold;
+    text-align: center;
+}
+
+.Wordle {
+    margin: auto;
+    max-width: 600px;
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100 - 30px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.Wordle__board {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.Wordle__Result {
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: calc(100% - 60px);
+    max-height: 90%;
+    max-width: 440px;
+
+    padding: 25px;
+    background: white;
+    border: 2px solid #494c66;
+}
+
+.Row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 500px;
+}
+
+.Row--error {
+    animation: shake 0.8s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+.Row--red {
+    color: red;
+}
+.Row--red .Letter {
+    border-color: red;
+}
+
+.Letter {
+    height: calc(min(100vw, 500px, calc(100vh - 200px)) / 6 - 10px);
+    width: calc(min(100vw, 500px, calc(100vh - 200px)) / 6 - 10px);
+    font-size: calc(min(100vw, 500px, calc(100vh - 200px)) / 10);
+    border: 2px solid #494c66;
+    margin: 3px;
+    line-height: calc(min(100vw, 500px, calc(100vh - 200px)) / 6 - 10px);
+    text-align: center;
+    transition: background 0.3s ease-in;
+    font-weight: 500;
+}
+
+.KeyBoard {
+    max-width: min(calc(100vw - 10px), 600px);
+}
+
+.KeyBoard__row {
+    display: flex;
+}
+.KeyBoard__row:nth-child(2) {
+    margin: 0 15px;
+}
+
+.KeyBoard__key {
+    display: flex;
+    flex: 1 0 0;
+    height: 60px;
+    width: 60px;
+    border: 0;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+    font-size: 20px;
+    border: 2px solid #494c66;
+}
+
+.KeyBoard__enter {
+    flex: 2 0 0;
+}
+
+.grey {
+    /* background: #bcbcbc; */
+    background: #b4b5ba;
+}
+
+.yellow {
+    /* background: #f4ed30; */
+    background: #dad306;
+}
+
+.green {
+    /* background: #97fe97; */
+    background: #31d031;
+}
+
+.white {
+    background: #f0f1f6;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.ListButton--right {
+  margin-left: 100px;
 }
