@@ -19,7 +19,7 @@ function Wordle({ target, isValidWord, onNewGame }) {
     }, [target])
 
     const handleKeyDown = (e) => {
-        if (i >= guesses.length) return;
+        if (i >= guesses.length || guesses[i - 1] === target) return;
 
         if (e.key === 'Backspace') {
             const newGuesses = [...guesses];
@@ -29,9 +29,9 @@ function Wordle({ target, isValidWord, onNewGame }) {
         } else if (e.key === 'Enter' && guesses[i].length === target.length) {
             if (isValidWord(guesses[i])) {
                 setI(i + 1);
-                if (i > guesses.length || guesses[i] === target) {
+                if (i >= guesses.length - 1 || guesses[i] === target) {
                     setTimeout(() => setModalDisplay(true), 1000)
-                } 
+                }
             } else {
                 setError(error + 1);
             }

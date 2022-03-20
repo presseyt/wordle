@@ -2,7 +2,14 @@ import { useState, useEffect } from 'react';
 import Wordle from './Wordle.js';
 import './App.css';
 
-import { sixLetterWords, sixLetterTargets, fourLetterWords, fourLetterJQXZ } from './words'
+import {
+    sixLetterWords,
+    sixLetterTargets,
+    fourLetterWords,
+    fourLetterJQXZ,
+    sevenLetterWords,
+    sevenLetterTargets,
+} from './words'
 
 const setVH = () => document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 const getDailyWord = (_targets) => {
@@ -10,7 +17,8 @@ const getDailyWord = (_targets) => {
     const prime = 881; // 863
     const index = prime * daysElapsed % _targets.length;
 
-    const permute = (word) => word[4] + word[2] + word[1] + word[5] + word[0] + word[3];
+    const permute = (word) => word[4] + word[2] + word[1] + word[5] + word[0] + word[3] + word[6];
+    // const permute = (word) => word[4] + word[2] + word[1] + word[5] + word[0] + word[3];
     // const permute = (word) =>  word[2] + word[1] + word[0] + word[3];
 
     const jumbled = _targets.map(permute).sort();
@@ -25,15 +33,15 @@ const getRandomTarget = (_targets) => {
 
 function App() {
     const [daily, setDaily] = useState(localStorage.getItem('daily') ?? true);
-    
-    const [targets, setTargets] = useState(sixLetterTargets);
-    const [dictionary, setDictionary] = useState(sixLetterWords);
+
+    const [targets, setTargets] = useState(sevenLetterTargets);
+    const [dictionary, setDictionary] = useState(sevenLetterWords);
     const [targetWord, setTargetWord] = useState(getDailyWord(targets));
 
     const isValidWord = (str) => dictionary.includes(str.toUpperCase());
-    
+
     const play = () => setTargetWord(getRandomTarget(targets));
-    
+
     useEffect(() => {
         setVH();
         window.onresize = setVH;
@@ -42,7 +50,7 @@ function App() {
     return (
         <div className="App">
             <div className="App__header">
-                Scwordle 
+                Scwordle
                 <button onClick={play}>Play Again</button>
             </div>
             <Wordle target={targetWord} onNewGame={play} isValidWord={isValidWord} />
