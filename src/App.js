@@ -3,26 +3,35 @@ import Wordle from './Wordle.js';
 import './App.css';
 
 import {
-    sixLetterWords,
-    sixLetterTargets,
+    threeLetterWords,
     fourLetterWords,
     fourLetterJQXZ,
+    sixLetterWords,
+    sixLetterTargets,
     sevenLetterWords,
     sevenLetterTargets,
 } from './words'
+
+const gameModes = {
+    three: { dictionary: threeLetterWords, targets: threeLetterWords, givens: 8 },
+    four: { dictionary: fourLetterWords, targets: fourLetterWords, givens: 5 },
+    fourJQXZ: { dictionary: fourLetterJQXZ, targets: fourLetterJQXZ },
+    six: { dictionary: sixLetterWords, targets: sixLetterTargets },
+    dailySix: { dictionary: sixLetterWords, targets: sixLetterTargets, daily: true },
+    curatedSix: { dictionary: sixLetterWords, targets: sixLetterTargets, daily: true },
+    seven: { dictionary: sevenLetterWords, targets: sevenLetterTargets },
+    dailySeven: { dictionary: sevenLetterWords, targets: sevenLetterTargets, daily: true },
+    curatedSeven: { dictionary: sevenLetterWords, targets: sevenLetterTargets, daily: true },
+};
 
 const setVH = () => document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 const getDailyWord = (_targets) => {
     const daysElapsed = Math.floor((new Date() - new Date('2022-03-01')) / (24*60*60*1000)) + 15;
     const prime = 881; // 863
     const index = prime * daysElapsed % _targets.length;
-
     const permute = (word) => word[4] + word[2] + word[1] + word[5] + word[0] + word[3] + word[6];
-    // const permute = (word) => word[4] + word[2] + word[1] + word[5] + word[0] + word[3];
-    // const permute = (word) =>  word[2] + word[1] + word[0] + word[3];
-
     const jumbled = _targets.map(permute).sort();
-    return permute(jumbled[index]);
+    return permute(jumbled[index]).slice(0, _targets[0].length);
 }
 const getRandomTarget = (_targets) => {
     if (!_targets) return null;
@@ -32,11 +41,8 @@ const getRandomTarget = (_targets) => {
 
 
 function App() {
-    const [daily, setDaily] = useState(localStorage.getItem('daily') ?? true);
-
-    const [targets, setTargets] = useState(sevenLetterTargets);
-    const [dictionary, setDictionary] = useState(sevenLetterWords);
-    const [targetWord, setTargetWord] = useState(getDailyWord(targets));
+    const [{ targets, dictionary, givens, daily }, setMode] = useState(gameModes.three);
+    const [targetWord, setTargetWord] = useState(daily ? getDailyWord(targets) : getRandomTarget(targets));
 
     const isValidWord = (str) => dictionary.includes(str.toUpperCase());
 
@@ -53,7 +59,7 @@ function App() {
                 Scwordle
                 <button onClick={play}>Play Again</button>
             </div>
-            <Wordle target={targetWord} onNewGame={play} isValidWord={isValidWord} />
+            <Wordle target={targetWord} onNewGame={play} isValidWord={isValidWord} givens={givens} />
         </div>
     );
 }

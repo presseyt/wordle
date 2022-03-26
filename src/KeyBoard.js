@@ -3,17 +3,18 @@ import { colorGuess } from './helpers.js';
 const qwerty = 'QWERTYUIOPASDFGHJKLZXCVBNM';
 const alphabetical = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-function KeyBoard({ target, guesses, onChange }) {
+function KeyBoard({ target, guesses, givens, onChange }) {
     const guessedLetters = guesses.join('');
     const colors = guesses.map((guess) => colorGuess(target, guess)).flat();
 
     const getColor = (letter) => {
         let color = 'white';
+        if (givens.includes(letter)) return 'grey';
         for (let j in guessedLetters) {
             if (guessedLetters[j] === letter) {
                 if (colors[j] === 'green') return 'green';
                 else if (colors[j] === 'yellow') color = 'yellow';
-                else if (color !== 'yellow') color = 'grey'
+                else if (color !== 'yellow') color = 'grey';
             }
         }
         return color;
