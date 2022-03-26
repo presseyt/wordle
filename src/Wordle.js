@@ -29,18 +29,16 @@ const makeGivenStr = (givens, target) => {
     return str;
 }
 
-function Wordle({ target, isValidWord, onNewGame, givens }) {
+function Wordle({ target, isValidWord, onNewGame, setModal, givens }) {
     const [guesses, setGuesses] = useState(initialState);
     const [i, setI] = useState(0);
     const [error, setError] = useState(0);
-    const [modalDisplay, setModalDisplay] = useState(false);
     const [givenStr, setGivenStr] = useState(makeGivenStr(givens, target));
 
     useEffect(() => {
         setGuesses(initialState);
         setI(0);
         setError(0);
-        setModalDisplay(false);
         setGivenStr(makeGivenStr(givens, target));
     }, [target])
 
@@ -55,8 +53,10 @@ function Wordle({ target, isValidWord, onNewGame, givens }) {
         } else if (e.key === 'Enter' && guesses[i].length === target.length) {
             if (isValidWord(guesses[i])) {
                 setI(i + 1);
-                if (i >= guesses.length - 1 || guesses[i] === target) {
-                    setTimeout(() => setModalDisplay(true), 1000)
+                if (guesses[i] === target) {
+                    setTimeout(() => setModal('win'), 1000);
+                } else if (i >= guesses.length - 1) {
+                    setTimeout(() => setModal('lose'), 1000)
                 }
             } else {
                 setError(error + 1);
@@ -81,17 +81,6 @@ function Wordle({ target, isValidWord, onNewGame, givens }) {
               ))}
           </div>
           <KeyBoard target={target} guesses={guesses.slice(0, i)} onChange={handleKeyDown} givens={givenStr} />
-          {modalDisplay && guesses[i - 1] === target ? (
-              <Modal open onClose={() => setModalDisplay(false)}>
-                  You won!
-                  <button onClick={onNewGame}> Play Again </button>
-              </Modal>
-          ) : modalDisplay && i >= guesses.length && (
-              <Modal open onClose={() => setModalDisplay(false)}>
-                  You lost!  The wordle was {target}
-                  <button onClick={onNewGame}> Play Again </button>
-              </Modal>
-          )}
       </div>
     );
 }

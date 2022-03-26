@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Wordle from './Wordle.js';
+import Modal from './Modal.js';
 import './App.css';
 
 import {
@@ -13,15 +14,15 @@ import {
 } from './words'
 
 const gameModes = {
-    three: { dictionary: threeLetterWords, targets: threeLetterWords, givens: 8 },
-    four: { dictionary: fourLetterWords, targets: fourLetterWords, givens: 5 },
-    fourJQXZ: { dictionary: fourLetterJQXZ, targets: fourLetterJQXZ },
-    six: { dictionary: sixLetterWords, targets: sixLetterTargets },
-    dailySix: { dictionary: sixLetterWords, targets: sixLetterTargets, daily: true },
-    curatedSix: { dictionary: sixLetterWords, targets: sixLetterTargets, daily: true },
-    seven: { dictionary: sevenLetterWords, targets: sevenLetterTargets },
-    dailySeven: { dictionary: sevenLetterWords, targets: sevenLetterTargets, daily: true },
-    curatedSeven: { dictionary: sevenLetterWords, targets: sevenLetterTargets, daily: true },
+    three: { mode: 'three', dictionary: threeLetterWords, targets: threeLetterWords, givens: 9, text: 'Three letter NASPA' },
+    four: { mode: 'four', dictionary: fourLetterWords, targets: fourLetterWords, givens: 5, text: 'Four letter NASPA' },
+    fourJQXZ: { mode: 'fourJQXZ', dictionary: fourLetterJQXZ, targets: fourLetterJQXZ, text: 'Four letter NASPA JQXZ' },
+    six: { mode: 'six', dictionary: sixLetterWords, targets: sixLetterTargets, text: 'Six letter NASPA' },
+    dailySix: { mode: 'dailySix', dictionary: sixLetterWords, targets: sixLetterTargets, daily: true, text: 'Daily six' },
+    curatedSix: { mode: 'curatedSix', dictionary: sixLetterWords, targets: sixLetterTargets, text: 'Curated six letter words' },
+    seven: { mode: 'seven', dictionary: sevenLetterWords, targets: sevenLetterTargets, text: 'Seven letter NASPA' },
+    dailySeven: { mode: 'dailySeven', dictionary: sevenLetterWords, targets: sevenLetterTargets, daily: true, text: 'Daily seven' },
+    curatedSeven: { mode: 'curatedSeven', dictionary: sevenLetterWords, targets: sevenLetterTargets, text: 'Curated seven letter words' },
 };
 
 const setVH = () => document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
@@ -41,12 +42,16 @@ const getRandomTarget = (_targets) => {
 
 
 function App() {
-    const [{ targets, dictionary, givens, daily }, setMode] = useState(gameModes.three);
+    const [{ mode, targets, dictionary, givens, daily }, setMode] = useState(gameModes.curatedSix);
     const [targetWord, setTargetWord] = useState(daily ? getDailyWord(targets) : getRandomTarget(targets));
+    const [modalDisplay, setModalDisplay] = useState(false);
 
     const isValidWord = (str) => dictionary.includes(str.toUpperCase());
 
-    const play = () => setTargetWord(getRandomTarget(targets));
+    const play = () => {
+        setModalDisplay(false);
+        setTargetWord(getRandomTarget(targets));
+    };
 
     useEffect(() => {
         setVH();
@@ -57,9 +62,34 @@ function App() {
         <div className="App">
             <div className="App__header">
                 Scwordle
-                <button onClick={play}>Play Again</button>
+                <button onClick={() => setModalDisplay('stats')}>Stats</button>
+                <button onClick={() => setModalDisplay('settings')}>Settings</button>
             </div>
-            <Wordle target={targetWord} onNewGame={play} isValidWord={isValidWord} givens={givens} />
+            <Wordle target={targetWord} isValidWord={isValidWord} givens={givens} setModal={setModalDisplay} />
+            <Modal open={!!modalDisplay} onClose={() => setModalDisplay(false)}>
+                {modalDisplay === 'win' && 'You won!'}
+                {modalDisplay === 'lose' && `You lost!  The word was ${targetWord}`}
+                {daily ? (
+                    'Next scwordle tomorrow!'
+                ) : (
+                    <button onClick={play}> Play Again </button>
+                )}
+                {modalDisplay === 'settings' && (
+                    <>
+                        {Object.values(gameModes).filter(gameMode => !gameMode.daily).map(gameMode => (
+                            <button className={gameMode.mode === mode && 'selected'} onClick={() => setMode(gameMode)}>
+                                {gameMode.text}
+                            </button>
+                        ))}
+                        <hr />
+                        {Object.values(gameModes).filter(gameMode => gameMode.daily).map(gameMode => (
+                            <button className={gameMode.mode === mode && 'selected'} onClick={() => setMode(gameMode)}>
+                                {gameMode.text}
+                            </button>
+                        ))}
+                    < />
+                )}
+            </Modal>
         </div>
     );
 }
