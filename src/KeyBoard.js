@@ -8,8 +8,9 @@ function KeyBoard({ target, guesses, givens, onChange }) {
     const colors = guesses.map((guess) => colorGuess(target, guess)).flat();
 
     const getColor = (letter) => {
-        let color = 'white';
         if (givens.includes(letter)) return 'grey';
+
+        let color = 'white';
         for (let j in guessedLetters) {
             if (guessedLetters[j] === letter) {
                 if (colors[j] === 'green') return 'green';

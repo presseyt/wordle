@@ -35,7 +35,7 @@ function Wordle({ target, isValidWord, onNewGame, givens }) {
     const [error, setError] = useState(0);
     const [modalDisplay, setModalDisplay] = useState(false);
     const [givenStr, setGivenStr] = useState(makeGivenStr(givens, target));
-console.log('GIVENSTR:', givenStr)
+
     useEffect(() => {
         setGuesses(initialState);
         setI(0);
