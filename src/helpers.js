@@ -62,3 +62,22 @@ export function getRandomTarget(targets) {
     const index = Math.floor(Math.random() * targets.length);
     return targets[index];
 }
+
+export function getStats(mode) {
+    if (!mode) return;
+    let stats = localStorage.getItem(`stats-${mode}`);
+    return stats
+        ? JSON.parse(stats)
+        : { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, fail: 0, dnf: 0, streak: 0, maxStreak: 0 };
+}
+export function updateStats(mode, result) {
+    const stats = getStats(mode);
+    if (!stats) return false;
+
+    stats[result] += 1; // result should be 1, 2, 3, 4, 5, 6, fail
+    if (result < 7) stats.streak += 1;
+    if (result === 'fail') stats.streak = 0;
+    if (stats.streak > stats.maxStreak) stats.maxStreak += 1;
+    localStorage.setItem(`stats-${mode}`, JSON.stringify(stats));
+    return true;
+}

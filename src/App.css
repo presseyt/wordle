@@ -140,6 +140,54 @@ body {
     flex: 2 0 0;
 }
 
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+.Stats__kpis {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+.Stats__key {
+    font-weight: bold;
+}
+
+.BarChart__row {
+    display: flex;
+    align-items: center;
+}
+
+.BarChart__label {
+    flex: 0 0 1em;
+    height: 30px;
+    line-height: 30px;
+    border-right: 1px solid;
+    margin-right: 5px;
+}
+
+.BarChart__bar {
+    background: #b4b5ba;
+    height: 20px;
+    min-width: 1em;
+    text-align: right;
+    padding-right: 4px;
+}
+
 .grey {
     /* background: #bcbcbc; */
     background: #b4b5ba;
@@ -161,26 +209,4 @@ body {
 
 .selected {
     background: #cfcfff;
-}
-
-@keyframes shake {
-  10%, 90% {
-    transform: translate3d(-1px, 0, 0);
-  }
-
-  20%, 80% {
-    transform: translate3d(2px, 0, 0);
-  }
-
-  30%, 50%, 70% {
-    transform: translate3d(-4px, 0, 0);
-  }
-
-  40%, 60% {
-    transform: translate3d(4px, 0, 0);
-  }
-}
-
-.ListButton--right {
-  margin-left: 100px;
 }
