@@ -1,3 +1,25 @@
+import {
+    threeLetterWords,
+    fourLetterWords,
+    fourLetterJQXZ,
+    sixLetterWords,
+    sixLetterTargets,
+    sevenLetterWords,
+    sevenLetterTargets,
+} from './words'
+
+export const gameModes = {
+    '3a': { mode: '3a', dictionary: threeLetterWords, targets: threeLetterWords, numberOfGivens: 9, text: 'Three letter NASPA' },
+    '4a': { mode: '4a', dictionary: fourLetterWords, targets: fourLetterWords, numberOfGivens: 5, text: 'Four letter NASPA' },
+    '4b': { mode: '4b', dictionary: fourLetterJQXZ, targets: fourLetterJQXZ, text: 'Four letter NASPA JQXZ' },
+    '6a': { mode: '6a', dictionary: sixLetterWords, targets: sixLetterTargets, text: 'Six letter NASPA' },
+    '6d': { mode: '6d', dictionary: sixLetterWords, targets: sixLetterTargets, daily: true, text: 'Daily six' },
+    '6c': { mode: '6c', dictionary: sixLetterWords, targets: sixLetterTargets, text: 'Curated six letter words' },
+    '7a': { mode: '7a', dictionary: sevenLetterWords, targets: sevenLetterTargets, text: 'Seven letter NASPA' },
+    '7d': { mode: '7d', dictionary: sevenLetterWords, targets: sevenLetterTargets, daily: true, text: 'Daily seven' },
+    '7c': { mode: '7c', dictionary: sevenLetterWords, targets: sevenLetterTargets, text: 'Curated seven letter words' },
+};
+
 export function colorGuess(target, word) {
     if (target.length !== word.length) return null;
 
@@ -50,7 +72,7 @@ export function makeGivens(target, numberOfGivens) {
 
 export function getDailyWord(targets) {
     const daysElapsed = Math.floor((new Date() - new Date('2022-03-01')) / (24*60*60*1000)) + 15;
-    const prime = 881; // 863
+    const prime = 61129; // 863, 881
     const index = prime * daysElapsed % targets.length;
     const permute = (word) => word[4] + word[2] + word[1] + word[5] + word[0] + word[3] + word[6];
     const jumbled = targets.map(permute).sort();
@@ -63,13 +85,24 @@ export function getRandomTarget(targets) {
     return targets[index];
 }
 
-export function getStats(mode) {
-    if (!mode) return;
-    let stats = localStorage.getItem(`stats-${mode}`);
-    return stats
-        ? JSON.parse(stats)
-        : { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, fail: 0, dnf: 0, streak: 0, maxStreak: 0 };
+export function getLocalStorageJson(key, defaultValue) {
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : defaultValue;
 }
+
+export function putLocalStorageJson(key, update, defaultValue) {
+    const item = getLocalStorageJson(key, defaultValue);
+    const updatedItem = { ...item, ...update };
+    localStorage.setItem(key, JSON.stringify(updatedItem));
+    return true;
+}
+
+const defaultStats = { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, fail: 0, dnf: 0, streak: 0, maxStreak: 0 };
+
+export function getStats(mode) {
+    return getLocalStorageJson(`stats-${mode}`, defaultStats);
+}
+
 export function updateStats(mode, result) {
     const stats = getStats(mode);
     if (!stats) return false;

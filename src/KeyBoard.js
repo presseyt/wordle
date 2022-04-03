@@ -27,18 +27,18 @@ function KeyBoard({ target, guesses, givens, onChange }) {
         <div className="KeyBoard">
             <div className="KeyBoard__row">
                 {[...qwerty].slice(0, 10).map((c) => (
-                    <div className={`KeyBoard__key ${getColor(c)}`} onClick={handleClick(c)}>{c}</div>
+                    <div key={c} className={`KeyBoard__key ${getColor(c)}`} onClick={handleClick(c)}>{c}</div>
                 ))}
             </div>
             <div className="KeyBoard__row">
                 {[...qwerty].slice(10, 19).map((c) => (
-                    <div className={`KeyBoard__key ${getColor(c)}`} onClick={handleClick(c)}>{c}</div>
+                    <div key={c} className={`KeyBoard__key ${getColor(c)}`} onClick={handleClick(c)}>{c}</div>
                 ))}
             </div>
             <div className="KeyBoard__row">
                 <div className="KeyBoard__key KeyBoard__enter white" onClick={handleClick('Enter')}>{'Enter'}</div>
                 {[...qwerty].slice(19, 26).map((c) => (
-                    <div className={`KeyBoard__key ${getColor(c)}`} onClick={handleClick(c)}>{c}</div>
+                    <div key={c} className={`KeyBoard__key ${getColor(c)}`} onClick={handleClick(c)}>{c}</div>
                 ))}
                 <div className="KeyBoard__key white" onClick={handleClick('Backspace')}>{'<='}</div>
             </div>

@@ -8,6 +8,7 @@ function Row({ target, guess = '', submitted = false, error = 0 }) {
                 <div
                     className={colors ? `Letter ${colors[i]}` : 'Letter'}
                     style={{ transitionDelay: `${i * 100}ms` }}
+                    key={i}
                 >
                     {guess[i] || null}
                 </div>

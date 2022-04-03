@@ -12,7 +12,7 @@ function BarChart({ stats, result }) {
     return (
         <div className="BarChart">
             {[1, 2, 3, 4, 5, 6].map(x => (
-                <Bar label={x} count={stats[x]} max={max} green={x === result} />
+                <Bar key={x} label={x} count={stats[x]} max={max} green={x === result} />
             ))}
         </div>
     );

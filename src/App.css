@@ -94,10 +94,10 @@ body {
 }
 
 .Row--red {
-    color: red;
+    color: #6b0303;
 }
 .Row--red .Letter {
-    border-color: red;
+    border-color: #b90707;
 }
 
 .Letter {
@@ -158,11 +158,24 @@ body {
   }
 }
 
+.Play {
+    margin: auto;
+}
+
+.Stats .Stats__kpis {
+    margin-bottom: 5px;
+}
+
+.Stats .BarChart {
+    margin-bottom: 20px;
+}
+
 .Stats__kpis {
     display: flex;
     justify-content: space-around;
     text-align: center;
 }
+
 .Stats__key {
     font-weight: bold;
 }
@@ -174,8 +187,8 @@ body {
 
 .BarChart__label {
     flex: 0 0 1em;
-    height: 30px;
-    line-height: 30px;
+    height: 25px;
+    line-height: 25px;
     border-right: 1px solid;
     margin-right: 5px;
 }
@@ -188,18 +201,34 @@ body {
     padding-right: 4px;
 }
 
+.Settings__daily {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.Settings__daily button {
+    width: 100px;
+    padding: 5px;
+}
+
+.Settings__practice {
+    margin-bottom: 10px;
+}
+
+.Settings__practice button {
+    margin-bottom: 5px;
+}
+
 .grey {
-    /* background: #bcbcbc; */
     background: #b4b5ba;
 }
 
 .yellow {
-    /* background: #f4ed30; */
     background: #dad306;
 }
 
 .green {
-    /* background: #97fe97; */
     background: #31d031;
 }
 

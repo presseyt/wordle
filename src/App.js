@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Wordle from './Wordle.js';
 import Modal from './Modal.js';
 import Stats from './Stats.js';
+import Settings from './Settings.js';
 import './App.css';
 
 import {
@@ -9,39 +10,25 @@ import {
     getDailyWord,
     makeGivens,
     updateStats,
+    gameModes,
+    getLocalStorageJson,
+    putLocalStorageJson,
 } from './helpers.js';
 
-import {
-    threeLetterWords,
-    fourLetterWords,
-    fourLetterJQXZ,
-    sixLetterWords,
-    sixLetterTargets,
-    sevenLetterWords,
-    sevenLetterTargets,
-} from './words'
-
-const gameModes = {
-    '3a': { mode: '3a', dictionary: threeLetterWords, targets: threeLetterWords, numberOfGivens: 10, text: 'Three letter NASPA' },
-    '4a': { mode: '4a', dictionary: fourLetterWords, targets: fourLetterWords, numberOfGivens: 5, text: 'Four letter NASPA' },
-    '4b': { mode: '4b', dictionary: fourLetterJQXZ, targets: fourLetterJQXZ, text: 'Four letter NASPA JQXZ' },
-    '6a': { mode: '6a', dictionary: sixLetterWords, targets: sixLetterTargets, text: 'Six letter NASPA' },
-    '6d': { mode: '6d', dictionary: sixLetterWords, targets: sixLetterTargets, daily: true, text: 'Daily six' },
-    '6c': { mode: '6c', dictionary: sixLetterWords, targets: sixLetterTargets, text: 'Curated six letter words' },
-    '7a': { mode: '7a', dictionary: sevenLetterWords, targets: sevenLetterTargets, text: 'Seven letter NASPA' },
-    '7d': { mode: '7d', dictionary: sevenLetterWords, targets: sevenLetterTargets, daily: true, text: 'Daily seven' },
-    '7c': { mode: '7c', dictionary: sevenLetterWords, targets: sevenLetterTargets, text: 'Curated seven letter words' },
-};
-
 const getInitialGameState = (gameMode) => {
+    const savedState = gameMode.daily && getLocalStorageJson(gameMode.mode);
     const target = gameMode.daily ? getDailyWord(gameMode.targets) : getRandomTarget(gameMode.targets);
-    return { target, guesses: [], givens: makeGivens(target, gameMode.numberOfGivens) };
+    return {
+        target,
+        guesses: (savedState?.target === target && savedState?.guesses) || [],
+        givens: (savedState?.target === target && savedState?.givens) || makeGivens(target, gameMode.numberOfGivens),
+    };
 };
 
 const setVH = () => document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 
 function App() {
-    const [gameMode, setGameMode] = useState(gameModes['6c']);
+    const [gameMode, setGameMode] = useState(gameModes[localStorage.getItem('mode') || '6c']);
     const [gameState, setGameState] = useState(getInitialGameState(gameMode))
     const [modalDisplay, setModalDisplay] = useState(false);
     const inProgress = !!(gameState.guesses.length && gameState.guesses.length < 6 && gameState.guesses[gameState.guesses.length - 1] !== gameState.target);
@@ -59,13 +46,21 @@ function App() {
             updateStats(gameMode.mode, 'fail');
         }
 
-        setGameState({ ...gameState, guesses: [...gameState.guesses, guess] });
+        const nextState = { ...gameState, guesses: [...gameState.guesses, guess] };
+        if (gameMode.daily) putLocalStorageJson(gameMode.mode, nextState);
+        setGameState(nextState);
         return true;
     }
 
-    const play = () => {
+    const play = (mode) => {
         setModalDisplay(false);
-        setGameState(getInitialGameState(gameMode));
+        setGameState(getInitialGameState(mode));
+    };
+    const handleSelectMode = (mode) => {
+        localStorage.setItem('mode', mode.mode)
+        setModalDisplay(false);
+        setGameMode(mode);
+        play(mode);
     };
 
     useEffect(() => {
@@ -76,36 +71,27 @@ function App() {
     return (
         <div className="App">
             <div className="App__header">
-                Scwordle
+                {gameMode.daily ? 'Scwordle - daily' : 'Scwordle - practice'}
                 <button onClick={() => setModalDisplay('stats')}>Stats</button>
                 <button onClick={() => setModalDisplay('settings')}>Settings</button>
             </div>
             <Wordle target={gameState.target} givens={gameState.givens} guesses={gameState.guesses} onGuess={handleGuess} />
             <Modal open={!!modalDisplay} onClose={() => setModalDisplay(false)}>
-                {modalDisplay === 'win' && 'You won!'}
-                {modalDisplay === 'lose' && `You lost!  The word was ${gameState.target}`}
-                {(modalDisplay === 'win' || modalDisplay === 'lose' || modalDisplay === 'stats') && (
-                    <Stats mode={gameMode.mode} target={gameState.target} result={!inProgress && gameState.guesses.length} />
-                )}
-                {modalDisplay === 'settings' && (
-                    <>
-                        {Object.values(gameModes).filter(mode => !mode.daily).map(mode => (
-                            <button className={mode.mode === gameMode.mode && 'selected'} onClick={() => setGameMode(mode)}>
-                                {mode.text}
-                            </button>
-                        ))}
-                        <hr />
-                        {Object.values(gameModes).filter(mode => mode.daily).map(mode => (
-                            <button className={mode.mode === gameMode.mode && 'selected'} onClick={() => setGameMode(mode)}>
-                                {mode.text}
-                            </button>
-                        ))}
-                    < />
-                )}
-                {gameMode.daily ? (
-                    'Next scwordle tomorrow!'
+                {modalDisplay === 'settings' ? (
+                    <Settings mode={gameMode.mode} onSelect={handleSelectMode} />
                 ) : (
-                    <button onClick={play}> Play Again </button>
+                    <>
+                        {modalDisplay === 'win' && 'You won!'}
+                        {modalDisplay === 'lose' && `You lost!  The word was ${gameState.target}`}
+                        {(modalDisplay === 'win' || modalDisplay === 'lose' || modalDisplay === 'stats') && (
+                            <Stats mode={gameMode.mode} target={gameState.target} result={!inProgress && gameState.guesses.length} />
+                        )}
+                        {gameMode.daily ? (
+                            'Next scwordle tomorrow!'
+                        ) : (
+                            <button className="Play" onClick={() => play(gameMode)}> Play Again </button>
+                        )}
+                    </ >
                 )}
             </Modal>
         </div>

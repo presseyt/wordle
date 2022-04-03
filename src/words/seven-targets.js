@@ -1,5 +1,4 @@
-const sevenStr = `
-BANDANA
+const sevenStr = `BANDANA
 BAKLAVA
 PANACEA
 ALMANAC
