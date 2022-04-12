@@ -1,7 +1,7 @@
 import { colorGuess } from './helpers.js';
 
 const qwerty = 'QWERTYUIOPASDFGHJKLZXCVBNM';
-const alphabetical = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+// const alphabetical = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 function KeyBoard({ target, guesses, givens, onChange }) {
     const guessedLetters = guesses.join('');

@@ -28,7 +28,7 @@ const getInitialGameState = (gameMode) => {
 const setVH = () => document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 
 function App() {
-    const [gameMode, setGameMode] = useState(gameModes[localStorage.getItem('mode') || '6c']);
+    const [gameMode, setGameMode] = useState(gameModes[localStorage.getItem('mode') || '6d']);
     const [gameState, setGameState] = useState(getInitialGameState(gameMode))
     const [modalDisplay, setModalDisplay] = useState(false);
     const inProgress = !!(gameState.guesses.length && gameState.guesses.length < 6 && gameState.guesses[gameState.guesses.length - 1] !== gameState.target);

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Row from './Row.js';
 import KeyBoard from './KeyBoard.js';
-import Modal from './Modal.js';
 
 function Wordle({ target, givens, guesses, onGuess }) {
     const [guess, setGuess] = useState('');
@@ -36,7 +35,7 @@ function Wordle({ target, givens, guesses, onGuess }) {
     }, [handleKeyDown]);
 
     return (
-      <div className="Wordle" onKeyDown={handleKeyDown}>
+      <div className="Wordle">
           <div className="Wordle__board">
               {Array.from({ length: 6 }, (_, i) => (
                   <Row
