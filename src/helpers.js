@@ -71,9 +71,9 @@ export function makeGivens(target, numberOfGivens) {
 }
 
 export function getDailyWord(targets) {
-    const daysElapsed = Math.floor((new Date() - new Date('2022-03-01 01:00')) / (24*60*60*1000)) + 15;
+    const daysElapsed = Math.floor((new Date() - new Date('2022-03-01T01:00')) / (24*60*60*1000)) + 15;
     const prime = 97499; // 61129 // 863 // 881
-    const index = prime * daysElapsed % targets.length;
+    const index = (prime + daysElapsed) % targets.length;
     const permute = (word) => word[4] + word[2] + word[1] + word[5] + word[0] + word[3] + word[6];
     const jumbled = targets.map(permute).sort();
     return permute(jumbled[index]).slice(0, targets[0].length);
