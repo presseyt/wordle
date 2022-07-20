@@ -71,7 +71,7 @@ function App() {
     return (
         <div className="App">
             <div className="App__header">
-                {gameMode.daily ? 'Scwordle - daily' : 'Scwordle - practice'}
+                {gameMode.daily ? 'Wordle S - daily' : 'Wordle S - practice'}
                 <button onClick={() => setModalDisplay('stats')}>Stats</button>
                 <button onClick={() => setModalDisplay('settings')}>Settings</button>
             </div>
@@ -87,7 +87,7 @@ function App() {
                             <Stats mode={gameMode.mode} target={gameState.target} result={!inProgress && gameState.guesses.length} />
                         )}
                         {gameMode.daily ? (
-                            'Next scwordle tomorrow!'
+                            'Next Wordle S tomorrow!'
                         ) : (
                             <button className="Play" onClick={() => play(gameMode)}> Play Again </button>
                         )}

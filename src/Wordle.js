@@ -12,6 +12,7 @@ function Wordle({ target, givens, guesses, onGuess }) {
     }, [target])
 
     const handleKeyDown = (e) => {
+        if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
         if (guesses.length === 6 || guesses[guesses.length - 1] === target) return;
 
         if (e.key === 'Backspace') {
